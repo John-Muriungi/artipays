@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Request a song · {{ event.name }}{% endblock %}
+{% block main_class %}audience-container{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ event.get_absolute_url }}">← {{ event.name }}</a><section class="audience-form-card"><span class="eyebrow">SONG REQUEST · KES {{ event.song_request_price }}</span><h1>What should we play?</h1><p class="muted">Your request reaches the artist after M-Pesa confirms your payment.</p>
+<form method="post" class="form-stack">{% csrf_token %}{{ form.non_field_errors }}{% for field in form %}<label>{{ field.label }}{% if field.name == "tip_amount" %}<div class="suggested-amounts"><button type="button" data-amount="0">No tip</button><button type="button" data-amount="{{ event.minimum_tip }}">KES {{ event.minimum_tip }}</button><button type="button" data-amount="{{ event.minimum_tip|add:event.minimum_tip }}">Add tip</button></div>{% endif %}{{ field }}{{ field.errors }}</label>{% endfor %}<div class="payment-total"><span>Request + tip</span><strong>KES <span id="request-total" data-base="{{ event.song_request_price }}">{{ event.song_request_price }}</span></strong></div><button class="button button-primary button-full" type="submit">Pay with M-Pesa</button></form></section>
+{% endblock %}

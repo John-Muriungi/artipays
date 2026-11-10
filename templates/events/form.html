@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · Artipay{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">EVENT SETUP</span><h1>{{ title }}</h1><p>Each event has a unique public page and QR code.</p></div></div>
+<section class="panel">
+  <form method="post" class="form-grid">{% csrf_token %}{{ form.non_field_errors }}
+    {% for field in form %}<label class="{% if field.name == 'description' %}span-2{% endif %}">{{ field.label }}{{ field }}{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{{ field.errors }}</label>{% endfor %}
+    <div class="span-2 form-actions"><button class="button button-primary">Save event</button><a class="button button-quiet" href="{% url 'events:list' %}">Cancel</a></div>
+  </form>
+</section>
+{% endblock %}

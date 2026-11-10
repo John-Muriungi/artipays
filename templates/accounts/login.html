@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Artist login · Artipay{% endblock %}
+{% block main_class %}auth-wrap{% endblock %}
+{% block content %}
+<section class="auth-card">
+  <span class="eyebrow">WELCOME BACK</span>
+  <h1>Make your next set count.</h1>
+  <p class="muted">Log in to manage your events, requests and earnings.</p>
+  <form method="post" class="form-stack">{% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}<label>{{ field.label }}{{ field }}{{ field.errors }}</label>{% endfor %}
+    <button class="button button-primary button-full" type="submit">Log in</button>
+  </form>
+  <p class="auth-foot">New to Artipay? <a href="{% url 'accounts:register' %}">Create an artist account</a></p>
+  <a class="small-link" href="{% url 'accounts:password_reset' %}">Forgot your password?</a>
+</section>
+{% endblock %}

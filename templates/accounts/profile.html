@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Artist profile · Artipay{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">YOUR ACCOUNT</span><h1>Artist profile</h1><p>Keep the details on your public event pages up to date.</p></div></div>
+<section class="panel narrow">
+  <form method="post" enctype="multipart/form-data" class="form-stack">{% csrf_token %}
+    {% for field in form %}<label>{{ field.label }}{{ field }}{{ field.errors }}</label>{% endfor %}
+    <button class="button button-primary" type="submit">Save profile</button>
+  </form>
+  <hr><a href="{% url 'accounts:password_change' %}">Change password</a>
+</section>
+{% endblock %}

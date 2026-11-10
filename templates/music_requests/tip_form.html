@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Send a tip · {{ event.name }}{% endblock %}
+{% block main_class %}audience-container{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ event.get_absolute_url }}">← {{ event.name }}</a><section class="audience-form-card"><span class="eyebrow">SEND A TIP</span><h1>Support {{ event.artist.artistprofile.stage_name }}.</h1><p class="muted">Tips start at KES {{ event.minimum_tip }}. Payment is confirmed securely through M-Pesa.</p>
+<div class="suggested-amounts"><button type="button" data-tip="50">KES 50</button><button type="button" data-tip="100">KES 100</button><button type="button" data-tip="200">KES 200</button><button type="button" data-tip="500">KES 500</button></div>
+<form method="post" class="form-stack">{% csrf_token %}{{ form.non_field_errors }}{% for field in form %}<label>{{ field.label }}{{ field }}{{ field.errors }}</label>{% endfor %}<button class="button button-primary button-full" type="submit">Pay tip with M-Pesa</button></form></section>
+{% endblock %}

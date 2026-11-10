@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Payment status · Artipay{% endblock %}
+{% block main_class %}audience-container{% endblock %}
+{% block content %}
+<section class="payment-state" id="payment-status" data-status-url="{% url 'payments:status_json' payment.public_id %}">
+  <div class="loading-mark" aria-hidden="true">₭</div><span class="eyebrow">M-PESA PAYMENT</span>
+  <h1>{% if payment.status == "PENDING" %}Check your phone{% elif payment.status == "SUCCESS" %}Payment successful{% else %}Payment not completed{% endif %}</h1>
+  <p class="muted" id="payment-message">{% if payment.status == "PENDING" %}Enter your M-Pesa PIN on the prompt sent to {{ payment.phone_number }}. This page updates automatically.{% elif payment.status == "SUCCESS" %}Your payment has been verified.{% else %}{{ payment.result_description|default:"Your payment was not completed." }}{% endif %}</p>
+  <div class="payment-summary"><span>Amount</span><strong>KES {{ payment.amount }}</strong><span>Reference</span><strong>{{ payment.public_id|truncatechars:13 }}</strong></div>
+  {% if payment.status == "SUCCESS" %}<a class="button button-primary button-full" href="{% url 'payments:confirmation' payment.public_id %}">View confirmation</a>{% elif payment.status != "PENDING" %}{% if payment.transaction_type == "SONG_REQUEST" %}<a class="button button-primary button-full" href="{% url 'music_requests:create' payment.event.public_id %}">Try again</a>{% else %}<a class="button button-primary button-full" href="{% url 'music_requests:tip' payment.event.public_id %}">Try again</a>{% endif %}{% endif %}
+</section>
+{% endblock %}
+{% block scripts %}{% load static %}<script src="{% static 'js/payment-status.js' %}" defer></script>{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Payment successful · Artipay{% endblock %}
+{% block main_class %}audience-container{% endblock %}
+{% block content %}
+<section class="payment-state confirmation"><div class="success-mark">✓</div><span class="eyebrow">PAYMENT CONFIRMED</span><h1>Thank you!</h1>
+{% if payment.song_request %}<p>Your song request has been sent to {{ payment.event.artist.artistprofile.stage_name }}.</p><div class="confirmation-song"><strong>{{ payment.song_request.song_title }}</strong><span>{{ payment.song_request.song_artist }}</span></div><div class="payment-summary"><span>Request</span><strong>KES {{ payment.song_request.amount }}</strong><span>Tip</span><strong>KES {{ payment.song_request.tip_amount }}</strong><span>Total paid</span><strong>KES {{ payment.amount }}</strong><span>Status</span><strong>Submitted</strong></div>{% else %}<p>Your tip has been delivered to {{ payment.event.artist.artistprofile.stage_name }}. Asante!</p><div class="payment-summary"><span>Tip</span><strong>KES {{ payment.amount }}</strong><span>Receipt</span><strong>{{ payment.provider_receipt }}</strong></div>{% endif %}
+<a class="button button-quiet button-full" href="{{ payment.event.get_absolute_url }}">Back to event</a></section>
+{% endblock %}

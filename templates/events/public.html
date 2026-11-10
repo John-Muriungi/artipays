@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ event.name }} · {{ event.artist.artistprofile.stage_name }}{% endblock %}
+{% block main_class %}audience-container{% endblock %}
+{% block content %}
+<section class="public-hero">
+  <div class="public-artist">{% if event.artist.artistprofile.profile_image %}<img src="{{ event.artist.artistprofile.profile_image.url }}" alt="">{% else %}<span>{{ event.artist.artistprofile.stage_name|first|upper }}</span>{% endif %}<div><span class="eyebrow">LIVE WITH</span><h1>{{ event.artist.artistprofile.stage_name }}</h1></div></div>
+  <div class="public-event"><span class="badge badge-{{ event.status|lower }}">{{ event.get_status_display }}</span><h2>{{ event.name }}</h2><p>{{ event.venue }}{% if event.location %} · {{ event.location }}{% endif %}</p><p>{{ event.event_date|date:"D, M j" }} · {{ event.start_time }}</p>{% if event.description %}<p class="public-description">{{ event.description }}</p>{% endif %}</div>
+</section>
+<section class="audience-actions"><article class="action-tile"><span class="action-symbol">♫</span><h3>Request a song</h3><p>Pick the song you want to hear next.</p><div class="action-price">KES {{ event.song_request_price }} <small>per request</small></div>{% if event.status == "ACTIVE" %}<a class="button button-primary button-full" href="{% url 'music_requests:create' event.public_id %}">Request a song</a>{% else %}<button class="button button-disabled button-full" disabled>Requests are closed</button>{% endif %}</article>
+  <article class="action-tile"><span class="action-symbol tip-symbol">♡</span><h3>Send a tip</h3><p>Show the artist some love.</p><div class="action-price">From KES {{ event.minimum_tip }} <small>custom amount</small></div>{% if event.status == "ACTIVE" %}<a class="button button-secondary button-full" href="{% url 'music_requests:tip' event.public_id %}">Send a tip</a>{% else %}<button class="button button-disabled button-full" disabled>Payments are closed</button>{% endif %}</article></section>
+<p class="audience-note">Secure M-Pesa payment · Your request is shared only after payment is confirmed.</p>
+{% endblock %}

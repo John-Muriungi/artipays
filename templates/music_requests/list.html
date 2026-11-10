@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Song requests · Artipay{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">REQUEST QUEUE</span><h1>Song requests</h1><p>Paid requests only. New requests appear automatically while this page is open.</p></div></div>
+<div class="request-list" id="incoming-requests" data-feed-url="{% url 'music_requests:feed' %}">
+{% for item in song_requests %}<article class="request-card" data-request-id="{{ item.public_id }}"><div class="song-icon">♫</div><div class="request-info"><strong>{{ item.song_title }}</strong><span>{{ item.song_artist }} · {{ item.event.name }}</span><small>Requested by {{ item.requester_name|default:"Guest" }} · {{ item.created_at|date:"M j, H:i" }}{% if item.message %} · “{{ item.message }}”{% endif %}</small></div><div class="request-amount">KES {{ item.amount }}{% if item.tip_amount %}<small>+ KES {{ item.tip_amount }} tip</small>{% endif %}<span class="badge badge-{{ item.status|lower }}">{{ item.get_status_display }}</span></div><div class="status-actions"><form method="post" action="{% url 'music_requests:status' item.public_id %}">{% csrf_token %}{% if item.status == "PENDING" %}<button name="action" value="accept" class="button button-small button-primary">Accept</button><button name="action" value="reject" class="button button-small button-danger">Reject</button>{% elif item.status == "ACCEPTED" %}<button name="action" value="playing" class="button button-small button-primary">Mark playing</button>{% elif item.status == "PLAYING" %}<button name="action" value="played" class="button button-small button-primary">Mark played</button>{% endif %}</form></div></article>
+{% empty %}<div class="empty-state"><div class="empty-icon">♫</div><h3>No paid requests yet</h3><p>Once a customer completes M-Pesa and the provider confirms it, requests appear here.</p></div>{% endfor %}
+</div>
+{% endblock %}
+{% block scripts %}{% load static %}<script src="{% static 'js/dashboard.js' %}" defer></script>{% endblock %}

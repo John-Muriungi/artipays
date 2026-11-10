@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}My events · Artipay{% endblock %}
+{% block content %}
+<div class="page-heading heading-actions"><div><span class="eyebrow">YOUR LINEUP</span><h1>My events</h1><p>Create a unique request page and QR code for every show.</p></div><a class="button button-primary" href="{% url 'events:create' %}">＋ Create event</a></div>
+<div class="event-grid">{% for event in events %}<article class="event-card"><div class="event-card-top"><span class="badge badge-{{ event.status|lower }}">{{ event.get_status_display }}</span><span class="muted">{{ event.event_date|date:"M j, Y" }}</span></div><h2>{{ event.name }}</h2><p>{{ event.venue|default:"Venue not set" }}{% if event.location %} · {{ event.location }}{% endif %}</p><div class="event-price">KES {{ event.song_request_price }} <small>per request</small></div><div class="card-actions"><a class="button button-small button-quiet" href="{% url 'events:detail' event.pk %}">Manage</a><a class="button button-small button-primary" href="{% url 'events:qr' event.pk %}">View QR</a></div></article>{% empty %}<div class="empty-state"><h3>Your first event starts here</h3><p>Set a request price, add event details and get a ready-to-print QR code.</p><a class="button button-primary" href="{% url 'events:create' %}">Create event</a></div>{% endfor %}</div>
+{% endblock %}

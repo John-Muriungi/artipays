@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Artipay{% endblock %}
+{% block content %}
+<div class="page-heading heading-actions"><div><span class="eyebrow">ARTIST STUDIO</span><h1>Welcome, {{ request.user.artistprofile.stage_name }}.</h1><p>Your live shows, requests and earnings at a glance.</p></div><a class="button button-primary" href="{% url 'events:create' %}">＋ Create event</a></div>
+<div class="stats-grid">
+  <article class="stat-card"><span>Total events</span><strong>{{ total_events }}</strong><small>{{ active_events }} active</small></article>
+  <article class="stat-card"><span>Paid requests</span><strong>{{ total_requests }}</strong><small>{{ pending_requests }} need attention</small></article>
+  <article class="stat-card"><span>Completed requests</span><strong>{{ completed_requests }}</strong><small>Marked played</small></article>
+  <article class="stat-card"><span>Total earnings</span><strong>KES {{ earnings }}</strong><small>KES {{ tip_earnings }} in tips</small></article>
+  <article class="stat-card"><span>Pending payments</span><strong>{{ pending_payments }}</strong><small>Awaiting provider confirmation</small></article>
+</div>
+<div class="section-heading"><div><h2>Incoming requests</h2><p>Only verified, paid requests appear here.</p></div><a href="{% url 'music_requests:list' %}">Manage requests →</a></div>
+<section class="request-cards" id="incoming-requests" data-feed-url="{% url 'music_requests:feed' %}">
+  {% for item in recent_requests %}<article class="request-card" data-request-id="{{ item.public_id }}"><div class="song-icon">♫</div><div class="request-info"><strong>{{ item.song_title }}</strong><span>{{ item.song_artist }} · {{ item.event.name }}</span></div><div class="request-amount">KES {{ item.amount }}{% if item.tip_amount %}<small>+ {{ item.tip_amount }} tip</small>{% endif %}</div><a class="button button-small button-quiet" href="{% url 'music_requests:list' %}">Open</a></article>
+  {% empty %}<div class="empty-state"><div class="empty-icon">♫</div><h3>No new requests yet</h3><p>Once an audience payment is confirmed, their request will show up here.</p><a href="{% url 'events:create' %}">Set up an event</a></div>{% endfor %}
+</section>
+{% endblock %}
+{% block scripts %}<script src="{% load static %}{% static 'js/dashboard.js' %}" defer></script>{% endblock %}
